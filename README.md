@@ -1,7 +1,7 @@
 RattleMurmur - The alternative Murmur (which doesn't need xorg)
 ====================================
 
-RattleMurmur is an alternative Mumble Server, based of uMurmur.
+RattleMurmur is an alternative Mumble Server, based of uMurmur (which doesn't need xorg either).
 
 Instructions for building from source
 -------------------------------------
