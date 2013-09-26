@@ -3,12 +3,6 @@ welcometext = "Welcome to uMurmur!";
 certificate = "/etc/umurmur/cert.crt";
 private_key = "/etc/umurmur/key.key";
 password = "";
-# admin_password = "test";   # Set to enable admin functionality.
-# ban_length = 0;            # Length in seconds for a ban. Default is 0. 0 = forever.
-# enable_ban = false;        # Default is false
-# banfile = "banfile.txt";   # File to save bans to. Default is to not save bans to file.
-# sync_banfile = false;      # Keep banfile synced. Default is false, which means it is saved to at shutdown only.
-# allow_textmessage = true;  # Default is true
 # opus_threshold = 100;      # Percentage of users supporting Opus codec for it to be chosen. Default is 100.
 max_users = 10;
 
@@ -25,44 +19,24 @@ max_users = 10;
 # umurmurd will close and reopen the logfile if SIGHUP is received.
 # logfile = "/var/log/umurmurd.log";
 
-# Channel tree definition:
-# Root channel must always be defined first.
-# If a channel has a parent, the parent must be defined before the child channel(s).
-channels = ( {
-	 name = "Root";
-	 parent = "";
-	 description = "Root channel. No entry.";
-	 noenter = true;
-	 },
-	 {
-	 name = "Lobby";
-	 parent = "Root";
-	 description = "Lobby channel";
-	 },
-	 {
-	 name = "Red team";
-	 parent = "Lobby";
-	 description = "The Red team channel";
-     # password = "redpw";
-	 },
-	 {
-	 name = "Blue team";
-	 parent = "Lobby";
-	 description = "The Blue team channel";
-     # password = "bluepw";
-	 }
-);
-# Channel links configuration.
-channel_links = ( {
-	 source = "Lobby";
-	 destination = "Red team";
-	 },
-	 {
-	 source = "Lobby";
-	 destination = "Blue team";
-	 }
-);
-
-# The channel in which users will appear in when connecting.
-# Note that default channel can't have 'noenter = true' or password set
-default_channel = "Lobby";
+### HOOKS
+# These shall be paths to executable files which prints responses to stdout. stderr is redirected to the log.
+# Channel tree definition - commandline args are "listchannels", returns json
+# -like data.
+channells_hookcmd = "/etc/umurmur/hook.py"
+# Channel modification - commandline args are "modchannel", the channel name and
+# json which shows the modified fields. Also used for adding channels.
+channelmod_hookcmd = "/etc/umurmur/hook.py"
+# Channel removal - commandline args are "rmchannel" and the channel name.
+channelrm_hookcmd = "/etc/umurmur/hook.py"
+# Channel links - commandline args are "listlinks", returns json-like data
+channelln_hookcmd = "/etc/umurmur/hook.py"
+# Join hook - commandline args are "join", the joining username and a
+# certificate digest, returns "admin=1/0", exits with 0 to allow joining, else
+# it will cancel connection.
+join_hookcmd = "/etc/umurmur/hook.py
+# Ban hook - commandline args are "ban", the username of the banned and the
+# username of the admin.
+ban_hookcmd = "/etc/umurmur/hook.py"
+# Chat hook - commandline args are "chat", the username, the channel and the message. Everything printed to stdout is whispered to the sender.
+chat_hookcmd = "/etc/umurmur/hook.py"
